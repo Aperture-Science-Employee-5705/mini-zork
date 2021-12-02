@@ -1,30 +1,39 @@
 package game;
 
-import java.io.*;
 import java.util.*;
 
 public class node {
-    private LinkedList<door> connections = new LinkedList<door>();
+    private LinkedList<connector> connections = new LinkedList<connector>();
     private LinkedList<enemy> enemies;
     private LinkedList<item> items;
     private LinkedList<trap> traps;
     private String description;
     private String[] metadata;
     private int id;
+    private String name;
     private String type;
 
-    public node(int id ,String type ,LinkedList<enemy> enemies ,LinkedList<item> stuff ,LinkedList<trap> traps ,String description ,String[] metadata) {
-
-        this.enemies = enemies;
-        this.items = stuff;
-        this.traps = traps;
+    public node(int id ,String name ,String type ,String description ,String[] metadata) {
+        this.enemies = new LinkedList<enemy>();
+        this.items = new LinkedList<item>();
+        this.traps = new LinkedList<trap>();
         this.description = description;
         this.metadata = metadata;
         this.id = id;
+        this.name = name;
         this.type = type;
     }
-    public void addConnection(door connection) {
+    public void addConnection(connector connection) {
         this.connections.add(connection);
+    }
+    public void addEnemy(enemy enemy) {
+        this.enemies.add(enemy);
+    }
+    public void addItem(item item) {
+        this.items.add(item);
+    }
+    public void addTrap(trap trap) {
+        this.traps.add(trap);
     }
     public int id() {
         return this.id;
@@ -38,6 +47,21 @@ public class node {
         } else {
             doorM = "there are " + String.valueOf(this.connections.size()) + " doors attached.";
         }
-        return this.description + "\n" + doorM + "\n" + this.metadata[i] + "\n\n";
+        return this.description + "\n" + this.metadata[i] + "\n" + this.getConnectors() + "\n\n";
+    }
+    public String getConnectors() {
+        String str = "";
+        if (this.connections.size() == 1) {
+            str = "there is 1 door attached to the " + this.name + " : \n\n";
+        } else {
+            str = "there are " + String.valueOf(this.connections.size()) + " doors attached to the " + this.name + " : \n\n";
+        }
+        for (connector d : this.connections) {
+            str += d.getData()[0] + " (" + d.getData()[1] + ")\n";
+        }
+        return str;
+    }
+    public String unlockConnector(int num ,key Key) {
+        return this.connections.get(num).unlock(Key);
     }
 }
