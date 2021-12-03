@@ -2,18 +2,13 @@ package game;
 
 import java.util.Random;
 
-public class key{
+public class key extends item{
     private int id;
-    private boolean active;
+    private String name;
     private String description;
 
-    public key(int id ,boolean active ,String description) {
-        this.id = id;
-        this.active = active;
-        this.description = description;
-    }
-    public boolean isActive() {
-        return this.active;
+    public key(int id ,String name ,String description) {
+        super("key" ,name ,description ,id);
     }
     public String Description() {
         return this.description;

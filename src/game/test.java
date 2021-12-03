@@ -1,7 +1,8 @@
 package game;
 
 public class test {
-    public static void main(String[] args) {
+    //public static void main(String[] args) {
+        /*
         String[] meta = {"it is an old library with many dusty shelves" ,"there is a single lit lantern"};
         String[] meta2 = {"the locked door leads to a library" ,"it is dark and damp"};
         String[] meta3 = {"the locked door leads to a library" ,"it is well lit" ,"piles of gleaming gold fill the room."};
@@ -28,5 +29,6 @@ public class test {
         System.out.println(treasureRoom.unlockDoor(0 ,libraryKey));
         System.out.println(treasureRoom.unlockDoor(0 ,libraryKey));
 
-    }
+         */
+    //}
 }

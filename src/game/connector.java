@@ -27,7 +27,7 @@ public class connector {
         }
         if (key.id() == this.lock) {
             this.locked = false;
-            return "click!\nThe " + this.name + " unlocked!";
+            return "click!\nThe " + this.name + " door unlocked!";
         } else {
             String[] failResponses = {"this is not the right key!" ,"try as you might ,the key doesnt turn" ,"this key does not unlock this door!" ,"you try to unlock it ,but unfortunately this is not the right key for this lock!" ,"this key is for another lock!" ,"it seems that its the wrong key!" ,"thats not the right key!" ,"this key doesnt work!" ,"the lock refuses to turn. try a different key!"};
             Random rand = new Random();

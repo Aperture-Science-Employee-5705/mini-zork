@@ -29,6 +29,20 @@ public class node {
     public void addEnemy(enemy enemy) {
         this.enemies.add(enemy);
     }
+    public void giveEnemyItem(String name ,item item) {
+        for (enemy e : this.enemies) {
+            if (e.getName() == name) {
+                e.addToInventory(item);
+            }
+        }
+    }
+    public void giveEnemyItem(String name ,key key) {
+        for (enemy e : this.enemies) {
+            if (e.getName() == name) {
+                e.addToInventory(key);
+            }
+        }
+    }
     public void addItem(item item) {
         this.items.add(item);
     }
@@ -39,15 +53,13 @@ public class node {
         return this.id;
     }
     public String Description() {
-        Random rand = new Random();
-        int i = rand.nextInt(this.metadata.length);
-        String doorM = "";
-        if (this.connections.size() == 1) {
-            doorM = "there is 1 door attached.";
+        if (this.metadata.length > 0) {
+            Random rand = new Random();
+            int i = rand.nextInt(this.metadata.length);
+            return this.description + "\n\n" + this.metadata[i] + "\n" + this.getConnectors() + "\n\n";
         } else {
-            doorM = "there are " + String.valueOf(this.connections.size()) + " doors attached.";
+            return this.description + "\n\n" + this.getConnectors() + "\n\n";
         }
-        return this.description + "\n" + this.metadata[i] + "\n" + this.getConnectors() + "\n\n";
     }
     public String getConnectors() {
         String str = "";
