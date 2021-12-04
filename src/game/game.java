@@ -150,15 +150,14 @@ public class Game {
         battleHall.addEnemy(new enemy("Visrex the Indestructible" ,"" ,25 ,75 ,"Your soul"));
 
         //now to add a few traps
-        junction2.addTrap(new trap());//activation method : go to/from R8 ,trap type : moving sawblades ,disarm method : jam one of the two the metal parts in the mechanism
-        jackpotRoom.addTrap(new trap());//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
-        trapRoom.addTrap(new trap());//activation method : enter room ,trap type : crushing ceiling ,disarm method : trap key (obtainable by giving the soldat the metal part)
-        // TODO finish trap object
+        junction2.addTrap(new trap("moving saw trap" ,"" ,"enter_room" ,30 ,2 ,new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0) ,false));//activation method : go to/from R8 ,trap type : moving sawblades ,disarm method : jam one of the two the metal parts in the mechanism
+        jackpotRoom.addTrap(new trap("poison gas trap" ,"" ,"took_too_much;gold" ,-1 ,1 ,new item("placeholder" ,"" ,"" ,0) ,true));//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
+        trapRoom.addTrap(new trap("crushing ceiling trap" ,"" ,"enter_room" ,100 ,3 ,new key(8 , "trap key","An old ,grey ,chipped metal key. It is a little heavy and has the word \"TRAP\" engraved on it.") ,true));//activation method : enter room ,trap type : crushing ceiling ,disarm method : trap key (obtainable by giving the soldat the metal part)
+        
 
 
         //now to add the items
-        room6.addItem(new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0));
-        room6.addItem(new item("item" ,"metal part" ,"another shiny metal part from something mechanical" ,1));
+        room6.addItem(new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0) ,2);
 
     }
 }
