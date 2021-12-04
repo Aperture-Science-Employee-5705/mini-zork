@@ -13,12 +13,12 @@ public class node {
     private String name;
     private String type;
 
-    public node(int id ,String name ,String type ,String description ,String[] metadata) {
+    public node(int id ,String name ,String type ,String description ,String metadata) {
         this.enemies = new LinkedList<enemy>();
         this.items = new LinkedList<item>();
         this.traps = new LinkedList<trap>();
         this.description = description;
-        this.metadata = metadata;
+        this.metadata = metadata.split(";");
         this.id = id;
         this.name = name;
         this.type = type;
