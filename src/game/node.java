@@ -43,8 +43,10 @@ public class node {
             }
         }
     }
-    public void addItem(item item) {
-        this.items.add(item);
+    public void addItem(item item ,int num) {
+        for (int x=0;x<num;x++) {
+            this.items.add(item);
+        }
     }
     public void addTrap(trap trap) {
         this.traps.add(trap);

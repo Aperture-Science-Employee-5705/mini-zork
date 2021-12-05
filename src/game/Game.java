@@ -1,9 +1,5 @@
 package game;
 
-import sun.awt.image.ImageWatched;
-
-import java.util.LinkedList;
-
 public class Game {
     public static void main(String[] args) {
         //build map (i know its tedious doing the game this way ,but it'd be way more hellish if it was all if statements)
@@ -24,7 +20,7 @@ public class Game {
         node trapRoom = new node(11 ,"trap room" ,"room" ,"" ,"");
         node battleHall = new node(12 ,"final boss room" ,"room" ,"A large ,rectangular stone hall with pillars running down the length of it on both sides.\nAt the end of the room sits the final boss on his throne with a door either side of him ,one is marked \"TREASURE\" ,the other \"EXIT\"\n\nsuddenly you hear a \"click!\" as the door you just came through locks behind you." ,"");
         node jackpotRoom = new node(13 ,"treasure room 2" ,"room" ,"" ,"");
-        
+
         node finalRoom = new node(14 ,"The final room in the game and the exit to the dungeon." ,"room" ,"" ,"");
 
         node junction0 = new node(15 ,"junction" ,"junction" ,"" ,"");
@@ -154,11 +150,10 @@ public class Game {
         junction2.addTrap(new trap("moving saw trap" ,"" ,"enter_room" ,30 ,2 ,new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0) ,false));//activation method : go to/from R8 ,trap type : moving sawblades ,disarm method : jam one of the two the metal parts in the mechanism
         jackpotRoom.addTrap(new trap("poison gas trap" ,"" ,"took_too_much;gold" ,-1 ,1 ,new item("placeholder" ,"" ,"" ,0) ,true));//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
         trapRoom.addTrap(new trap("crushing ceiling trap" ,"" ,"enter_room" ,100 ,3 ,new key(8 , "trap key","An old ,grey ,chipped metal key. It is a little heavy and has the word \"TRAP\" engraved on it.") ,true));//activation method : enter room ,trap type : crushing ceiling ,disarm method : trap key (obtainable by giving the soldat the metal part)
-        
+
 
 
         //now to add the items
         room6.addItem(new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0) ,2);
-
     }
 }
