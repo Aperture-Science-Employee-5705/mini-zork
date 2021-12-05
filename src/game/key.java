@@ -8,7 +8,7 @@ public class key extends item{
     private String description;
 
     public key(int id ,String name ,String description) {
-        super("key" ,name ,description ,id);
+        super("key" ,name ,description ,1 ,1);
     }
     public String Description() {
         return this.description;

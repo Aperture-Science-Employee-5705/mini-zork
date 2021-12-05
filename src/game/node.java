@@ -1,5 +1,7 @@
 package game;
 
+import sun.awt.image.ImageWatched;
+
 import java.util.*;
 
 public class node {
@@ -43,10 +45,8 @@ public class node {
             }
         }
     }
-    public void addItem(item item ,int num) {
-        for (int x=0;x<num;x++) {
-            this.items.add(item);
-        }
+    public void addItem(item item) {
+        this.items.add(item);
     }
     public void addTrap(trap trap) {
         this.traps.add(trap);
@@ -77,5 +77,36 @@ public class node {
     }
     public String unlockConnector(int num ,key Key) {
         return this.connections.get(num).unlock(Key);
+    }
+    public String[] getItems() {
+        LinkedList<String> out = new LinkedList<String>();
+        for (item i : this.items) {
+            out.add(i.name());
+        }
+        String os = out.toString();
+        return os.substring(1 ,(os.length()-1)).split(", ");
+    }
+    /*
+    public void combineDuplicates() {
+        int count;
+        for (item i : this.items) {
+            count = -1;
+            for (item i2 : this.items) {
+                if (i2.name().equals(i.name())) {
+                    count++;
+                }
+                if (count > 0) {
+                    //code
+                }
+            }
+        }
+    }
+     */
+    public int getItemCount() {
+        int count = 0;
+        for (item i : this.items) {
+            count += i.amnt();
+        }
+        return count;
     }
 }

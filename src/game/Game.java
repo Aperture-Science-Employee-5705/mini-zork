@@ -147,13 +147,65 @@ public class Game {
         battleHall.addEnemy(new enemy("Visrex the Indestructible" ,"" ,25 ,75 ,"Your soul"));
 
         //now to add a few traps
-        junction2.addTrap(new trap("moving saw trap" ,"" ,"enter_room" ,30 ,2 ,new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0) ,false));//activation method : go to/from R8 ,trap type : moving sawblades ,disarm method : jam one of the two the metal parts in the mechanism
-        jackpotRoom.addTrap(new trap("poison gas trap" ,"" ,"took_too_much;gold" ,-1 ,1 ,new item("placeholder" ,"" ,"" ,0) ,true));//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
+        junction2.addTrap(new trap("moving saw trap" ,"" ,"enter_room" ,30 ,2 ,new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,6 ,1) ,false));//activation method : go to/from R8 ,trap type : moving sawblades ,disarm method : jam one of the two the metal parts in the mechanism
+        jackpotRoom.addTrap(new trap("poison gas trap" ,"" ,"took_too_much;dosh" ,-1 ,1 ,new item("placeholder" ,"" ,"" ,0 ,0) ,true));//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
         trapRoom.addTrap(new trap("crushing ceiling trap" ,"" ,"enter_room" ,100 ,3 ,new key(8 , "trap key","An old ,grey ,chipped metal key. It is a little heavy and has the word \"TRAP\" engraved on it.") ,true));//activation method : enter room ,trap type : crushing ceiling ,disarm method : trap key (obtainable by giving the soldat the metal part)
 
 
 
         //now to add the items
-        room6.addItem(new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,0) ,2);
+        junction0.addItem(new item("item" ,"small dagger" ,"" ,5 ,1));
+        room1.addItem(new item("item" ,"" ,"" ,0 ,1));
+        room1.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,10));
+        room1.addItem(new item("dosh" ,"fabrige egg" ,"" ,1 ,2));
+        room2.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,10));
+        room3.addItem(new item("item" ,"bandage" ,"" ,-10 ,1));
+        room5.addItem(new item("item" ,"bandage" ,"" ,-10 ,2));
+        room6.addItem(new item("item" ,"metal part" ,"A shiny metal part from something mechanical" ,6 ,2));
+        room7.addItem(new item("item" ,"baseball bat" ,"" ,12 ,1));
+        junction2.addItem(new item("item" ,"glass bottle" ,"" ,8 ,2));
+        junction4.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,12));
+        junction1.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,21));
+        junction3.addItem(new item("dosh" ,"silver candle stick" ,"" ,0 ,2));
+        junction3.addItem(new item("dosh" ,"antique gold pocketwatch" ,"" ,0 ,5));
+        room3.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,2));
+        room5.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,30));
+        room8.addItem(new item("item" ,"kitchen knife" ,"" ,18 ,1));
+        library.addItem(new item("item" ,"book" ,"" ,2 ,35));
+        library.addItem(new item("item" ,"small black book" ,"" ,0 ,1));
+
+
+        treasureRoom.addItem(new key(1 ,"regal hall key" ,"A solid gold key covered in scratches with a crown emblem etched on it."));
+        treasureRoom.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,250));
+        treasureRoom.addItem(new item("dosh" ,"jewel encrusted chalace" ,"" ,3 ,2));
+        treasureRoom.addItem(new item("dosh" ,"jeweled necklace" ,"" ,0 ,5));
+        treasureRoom.addItem(new item("dosh" ,"gemstone" ,"" ,0 ,10));
+        treasureRoom.addItem(new item("dosh" ,"golden sacraficial dagger" ,"" ,17 ,1));
+
+        jackpotRoom.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,250));
+        jackpotRoom.addItem(new item("dosh" ,"jewel encrusted chalace" ,"" ,3 ,2));
+        jackpotRoom.addItem(new item("dosh" ,"jeweled necklace" ,"" ,0 ,5));
+        jackpotRoom.addItem(new item("dosh" ,"gemstone" ,"" ,0 ,10));
+        jackpotRoom.addItem(new item("dosh" ,"golden sacraficial dagger" ,"" ,17 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"silver plate" ,"" ,0 ,4));
+        jackpotRoom.addItem(new item("dosh" ,"golden ring" ,"" ,0 ,15));
+        jackpotRoom.addItem(new item("dosh" ,"gold bar" ,"" ,0 ,10));
+        jackpotRoom.addItem(new item("dosh" ,"platinum teapot" ,"" ,0 ,3));
+        jackpotRoom.addItem(new item("dosh" ,"gandalf's staff" ,"" ,9 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"doge coin" ,"" ,0 ,10));
+        jackpotRoom.addItem(new item("dosh" ,"TeM aRmuR" ,"" ,0 ,1));
+        //jackpotRoom.addItem(new item("dosh" ,"big red jewel" ,"" ,0) ,1);// - but you dont get to have that because the annoying dog took it...
+        jackpotRoom.addItem(new item("dosh" ,"solid gold statue" ,"" ,25 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"pearl necklace" ,"" ,0 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"golden shield" ,"" ,1 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"treasure chest" ,"" ,3 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"silver candle stick" ,"" ,4 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"silver trophy" ,"" ,1 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"jade stattuette" ,"" ,1 ,1));
+
+        for (String s : jackpotRoom.getItems()) {
+            System.out.println(s);
+        }
+        System.out.println(jackpotRoom.getItemCount());
     }
 }
