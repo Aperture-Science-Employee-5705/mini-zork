@@ -1,11 +1,11 @@
 package game;
 
 public class item {
-    private String type;
-    private String name;
-    private String description;
-    private int dmg;
-    private int amnt;
+    public String type;
+    public String name;
+    public String description;
+    public int dmg;
+    public int amnt;
 
     public item(String type ,String name ,String description ,int dmg ,int amnt) {
         this.type = type;
@@ -26,5 +26,14 @@ public class item {
     }
     public int amnt() {
         return this.amnt;
+    }
+    public void incAmnt(int val) {
+        this.amnt += val;
+    }
+    public String type() {
+        return this.type;
+    }
+    public int dmg() {
+        return this.dmg;
     }
 }

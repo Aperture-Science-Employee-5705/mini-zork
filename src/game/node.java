@@ -15,15 +15,18 @@ public class node {
     private String name;
     private String type;
 
-    public node(int id ,String name ,String type ,String description ,String metadata) {
+    public node(int id ,String name ,String type ,String description ,String[] metadata) {
         this.enemies = new LinkedList<enemy>();
         this.items = new LinkedList<item>();
         this.traps = new LinkedList<trap>();
         this.description = description;
-        this.metadata = metadata.split(";");
+        this.metadata = metadata;
         this.id = id;
         this.name = name;
         this.type = type;
+    }
+    public String name() {
+        return this.name;
     }
     public void addConnection(connector connection) {
         this.connections.add(connection);
@@ -47,6 +50,7 @@ public class node {
     }
     public void addItem(item item) {
         this.items.add(item);
+        //this.combineDuplicates();
     }
     public void addTrap(trap trap) {
         this.traps.add(trap);
@@ -58,22 +62,28 @@ public class node {
         if (this.metadata.length > 0) {
             Random rand = new Random();
             int i = rand.nextInt(this.metadata.length);
-            return this.description + "\n\n" + this.metadata[i] + "\n" + this.getConnectors() + "\n\n";
+            return this.description + "\n" + this.metadata[i] + "\n\n" + this.getConnectors() + "\n";
         } else {
-            return this.description + "\n\n" + this.getConnectors() + "\n\n";
+            return this.description + "\n\n" + this.getConnectors() + "\n";
         }
     }
     public String getConnectors() {
         String str = "";
         if (this.connections.size() == 1) {
-            str = "there is 1 door attached to the " + this.name + " : \n\n";
+            str = "there is 1 door attached to " + this.name + " : \n";
         } else {
-            str = "there are " + String.valueOf(this.connections.size()) + " doors attached to the " + this.name + " : \n\n";
+            str = "there are " + String.valueOf(this.connections.size()) + " doors attached to " + this.name + " : \n";
         }
         for (connector d : this.connections) {
             str += d.getData()[0] + " (" + d.getData()[1] + ")\n";
         }
         return str;
+    }
+    public LinkedList<connector> getConnections() {
+        return this.connections;
+    }
+    public LinkedList<trap> getTraps() {
+        return this.traps;
     }
     public String unlockConnector(int num ,key Key) {
         return this.connections.get(num).unlock(Key);
@@ -85,6 +95,28 @@ public class node {
         }
         String os = out.toString();
         return os.substring(1 ,(os.length()-1)).split(", ");
+    }
+    public item getItemByName(String name) {
+        //this.combineDuplicates();
+        item out = new item("placeholder" ,"" ,"" ,0 ,0);
+        for (item i : this.items) {
+            if (i.name().equals(name)) {
+                out = i;
+                break;
+            }
+        }
+        return out;
+    }
+    public container getContainerByName(String name) {
+        //this.combineDuplicates();
+        container out = new container("placeholder" ,"" ,new LinkedList<item>() ,false);
+        for (item i : this.items) {
+            if (i.name().equals(name) && i.type().equals("container")) {
+                out = (container) i;
+                break;
+            }
+        }
+        return out;
     }
     /*
     public void combineDuplicates() {

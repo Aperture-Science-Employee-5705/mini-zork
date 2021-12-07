@@ -46,4 +46,10 @@ public class connector {
         String[] dat = {this.name ,Locked ,directions[this.direction]};
         return dat;
     }
+    public String type() {
+        return this.type;
+    }
+    public node destination() {
+        return this.destination;
+    }
 }
