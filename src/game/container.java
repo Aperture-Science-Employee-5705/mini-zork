@@ -18,4 +18,7 @@ public class container extends item{
     public LinkedList<item> getItems(){
         return this.items;
     }
+    public void removeItem(int index) {
+        this.items.remove(index);
+    }
 }

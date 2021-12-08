@@ -24,16 +24,4 @@ public class item {
             return this.name;
         }
     }
-    public int amnt() {
-        return this.amnt;
-    }
-    public void incAmnt(int val) {
-        this.amnt += val;
-    }
-    public String type() {
-        return this.type;
-    }
-    public int dmg() {
-        return this.dmg;
-    }
 }

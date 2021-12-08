@@ -22,7 +22,7 @@ public class trap {
         if (i.name.equals(this.deactivationM.name)) {
             return this.descriptions[3];
         }
-        return "that didnt work!";
+        return "that didnt work!\n" + this.descriptions[1];
     }
     public String getName() {
         return this.name;
@@ -44,5 +44,9 @@ public class trap {
     }
     public boolean getLockD() {
         return lockD;
+    }
+    public String[] getData() {
+        String[] dat = {this.name ,String.valueOf(this.turns) ,(this.lockD ? "lock" : "dont lock")};
+        return dat;
     }
 }

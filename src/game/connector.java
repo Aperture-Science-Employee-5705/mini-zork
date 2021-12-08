@@ -19,9 +19,6 @@ public class connector {
         this.type = type;
     }
     public String unlock(key key) {
-        if (this.type == "junction") {
-            return "there is no door to unlock!";
-        }
         if (!this.locked) {
             return "this action is pointless ,the door is already unlocked!";
         }

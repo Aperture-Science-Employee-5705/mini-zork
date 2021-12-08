@@ -5,15 +5,15 @@ import sun.awt.image.ImageWatched;
 import java.util.*;
 
 public class node {
-    private LinkedList<connector> connections = new LinkedList<connector>();
-    private LinkedList<enemy> enemies;
-    private LinkedList<item> items;
-    private LinkedList<trap> traps;
-    private String description;
-    private String[] metadata;
-    private int id;
-    private String name;
-    private String type;
+    public LinkedList<connector> connections = new LinkedList<connector>();
+    public LinkedList<enemy> enemies;
+    public LinkedList<item> items;
+    public LinkedList<trap> traps;
+    public String description;
+    public String[] metadata;
+    public int id;
+    public String name;
+    public String type;
 
     public node(int id ,String name ,String type ,String description ,String[] metadata) {
         this.enemies = new LinkedList<enemy>();
@@ -59,12 +59,20 @@ public class node {
         return this.id;
     }
     public String Description() {
+        String enemydat = "enemies in the room : \n";
+        if (this.enemies.size() > 0) {
+            for (enemy e : this.enemies) {
+                enemydat += e.getName() + "\n" + e.Description() + "\n";
+            }
+        } else {
+            enemydat = "there are no enemies in the room!";
+        }
         if (this.metadata.length > 0) {
             Random rand = new Random();
             int i = rand.nextInt(this.metadata.length);
-            return this.description + "\n" + this.metadata[i] + "\n\n" + this.getConnectors() + "\n";
+            return this.description + "\n" + this.metadata[i] + "\n" + this.getConnectors() + "\n" + enemydat;
         } else {
-            return this.description + "\n\n" + this.getConnectors() + "\n";
+            return this.description + "\n" + this.getConnectors() + "\n" + enemydat;
         }
     }
     public String getConnectors() {
@@ -87,6 +95,9 @@ public class node {
     }
     public String unlockConnector(int num ,key Key) {
         return this.connections.get(num).unlock(Key);
+    }
+    public LinkedList<enemy> getEnemies() {
+        return this.enemies;
     }
     public String[] getItems() {
         LinkedList<String> out = new LinkedList<String>();
@@ -111,7 +122,7 @@ public class node {
         //this.combineDuplicates();
         container out = new container("placeholder" ,"" ,new LinkedList<item>() ,false);
         for (item i : this.items) {
-            if (i.name().equals(name) && i.type().equals("container")) {
+            if (i.name().equals(name) && i.type.equals("container")) {
                 out = (container) i;
                 break;
             }
@@ -137,7 +148,7 @@ public class node {
     public int getItemCount() {
         int count = 0;
         for (item i : this.items) {
-            count += i.amnt();
+            count += i.amnt;
         }
         return count;
     }

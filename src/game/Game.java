@@ -166,8 +166,8 @@ public class Game {
         room1.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,10));
         room1.addItem(new item("dosh" ,"fabrige egg" ,"" ,1 ,2));
         room2.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,10));
-        room3.addItem(new item("Hitem" ,"bandage" ,"" ,-10 ,1));
-        room5.addItem(new item("Hitem" ,"bandage" ,"" ,-10 ,2));
+        room3.addItem(new item("Hitem" ,"old bandage" ,"" ,-10 ,1));
+        room5.addItem(new item("Hitem" ,"bandage" ,"" ,-15 ,2));
         room6.addItem(new item("item" ,"metal part" ,"A shiny metal part from something mechanical" ,6 ,2));
         room7.addItem(new item("item" ,"baseball bat" ,"" ,12 ,1));
         junction2.addItem(new item("item" ,"glass bottle" ,"" ,8 ,2));
@@ -209,7 +209,7 @@ public class Game {
         treasureRoom.addItem(new item("dosh" ,"jeweled necklace" ,"" ,0 ,5));
         treasureRoom.addItem(new item("dosh" ,"gemstone" ,"" ,0 ,10));
         treasureRoom.addItem(new item("dosh" ,"golden sacrificial dagger" ,"" ,17 ,1));
-        treasureRoom.addItem(new item("Hitem" ,"magic potion" ,"" ,0 ,1));
+        treasureRoom.addItem(new item("Hitem" ,"magic potion" ,"" ,-10000000 ,1));
 
         jackpotRoom.addItem(new item("dosh" ,"gold coin" ,"" ,0 ,250));
         jackpotRoom.addItem(new item("dosh" ,"jewel encrusted chalice" ,"" ,3 ,2));
@@ -220,7 +220,7 @@ public class Game {
         jackpotRoom.addItem(new item("dosh" ,"golden ring" ,"" ,0 ,15));
         jackpotRoom.addItem(new item("dosh" ,"gold bar" ,"" ,0 ,10));
         jackpotRoom.addItem(new item("dosh" ,"platinum teapot" ,"" ,0 ,3));
-        jackpotRoom.addItem(new item("dosh" ,"gandalf's staff" ,"" ,9 ,1));
+        jackpotRoom.addItem(new item("dosh" ,"gandalf's flip flop" ,"" ,9 ,1));
         jackpotRoom.addItem(new item("dosh" ,"doge coin" ,"" ,0 ,10));
         jackpotRoom.addItem(new item("dosh" ,"TeM aRmuR" ,"" ,0 ,1));
         //jackpotRoom.addItem(new item("dosh" ,"big red jewel" ,"" ,0) ,1);// <- but you dont get to have that because the annoying dog took it...
@@ -231,6 +231,28 @@ public class Game {
         jackpotRoom.addItem(new item("dosh" ,"silver candle stick" ,"" ,4 ,1));
         jackpotRoom.addItem(new item("dosh" ,"silver trophy" ,"" ,1 ,1));
         jackpotRoom.addItem(new item("dosh" ,"jade statuette" ,"" ,1 ,2));
+
+        map game = new map();
+        game.addNode(startingRoom);
+        game.addNode(room1);
+        game.addNode(room2);
+        game.addNode(room3);
+        game.addNode(room4);
+        game.addNode(room5);
+        game.addNode(room6);
+        game.addNode(room7);
+        game.addNode(room8);
+        game.addNode(library);
+        game.addNode(treasureRoom);
+        game.addNode(trapRoom);
+        game.addNode(battleHall);
+        game.addNode(jackpotRoom);
+        game.addNode(finalRoom);
+        game.addNode(junction0);
+        game.addNode(junction1);
+        game.addNode(junction2);
+        game.addNode(junction3);
+        game.addNode(junction4);
 
 
 
@@ -246,105 +268,256 @@ public class Game {
         System.out.print("what will your name be?\n\nname : \t");
         String name = scan.nextLine();
         player player1 = new player(name ,20 ,1 ,startingRoom);
+        game.addPlayer(player1);
         System.out.println("welcome " + name + "!");
         System.out.println("\nThis game is a turn based dungeon crawler game where everthing is described with text and all actions are performed by typing in commands");
-        System.out.println("Almost every action you perform takes up a turn\n\t(unless you are checking your inventory ,checking an item in your inventory or asking for help as these three commands do not take up a turn)");
-        System.out.println("\nhere are the actions you can perform : \n\n\tuse <item> <thing>         : uses an item on a thing ,for instance using a key on a lock or a weapon on an enemy (if its a health item ,you dont have to specify the <thing>)\n\t\t\t(for items with a space in their name ,replace the spaces with an _ (\"test item\" -> \"test_item\"))\n\tmove to <room or junction> : moves the player around the map (obviously you cannot move through locked doors though)\n\tpick up <item>             : picks up an item from the room\n\tcheck <item>               : analyses an item in your inventory\n\thelp                       : asks for this menu and a help page\n\tinv                        : checks the contents of your inventory");
+        System.out.println("Almost every action you perform takes up a turn\n\t(unless you are checking your inventory ,checking an item in your inventory ,picking up an item ,checking the items in the room or asking for help\n\tas these five commands do not take up a turn)");
+        System.out.println("\nhere are the actions you can perform : \n\n\tuse <item> <thing>         : uses an item on a thing ,for instance using a key on a lock or a weapon on an enemy (if its a health item ,you dont have to specify the <thing>)\n\t\t\t                    (for items with a space in their name ,replace the spaces with an _ (\"test item\" -> \"test_item\"))\n\tmove to <room or junction> : moves the player around the map (obviously you cannot move through locked doors though)\n\tpick up <item>             : picks up an item from the room\n\tcheck <item>               : analyses an item in your inventory\n\thelp                       : asks for this menu and a help page\n\tinv                        : checks the contents of your inventory\n\tcheck items               : displays the items in the room");
         System.out.println();
 
         player1.addToInventory(new key(0 ,"green key" ,"A small ,chipped cast iron key with a green tag attached" ,3));
 
-        System.out.println("\n -- press enter to start -- ");
-        String none = scan.nextLine();
-        String data;
-        String[] data2;
+
         String action;
+        int counter;
         boolean printData = true;
+        boolean turnTaken = false;
         boolean done = false;
         while (!done) {//game loop
-            node loc = player1.getLocation();
+            turnTaken = false;
+
             if (printData) {
-                System.out.print("\ncurrent location : [" + loc.name() + "]\n" + loc.Description());//  only prints out data when you enter a room or unlock a door
-                printData = false;//                                                                  (to prevent clogging the terminal up with unnecessary repeated info)
+                System.out.println("current location : [" + game.player.getLocation().name + "]\n" + game.player.getLocation().Description());
+                printData = false;
             }
-            System.out.print("\nwhat will you do " + player1.name() + "? : ");
+
+            System.out.print("what will you do " + game.player.name() + "? : ");
             action = scan.nextLine();
-            if (action.equals("")) {
-                continue;
-            } if ((action.split(" ")[0] + action.split(" ")[1]).equals("moveto")) {//moving around the map
-                data = action.substring(8 ,action.length());
-                for (connector c : loc.getConnections()) {
-                    if (c.getData()[0].equals(data)) {
-                        if (c.getData()[1].equals("unlocked")) {
-                            player1.setLocation(c.destination());
-                            printData = true;
-                            break;
-                        } else {
-                            String[] failResponses = {"the door doesnt budge ,it seems that its locked!\nperhaps you should unlock it first." ,"the door refuses to open.\nperhaps you should unlock it first." ,"the door wont open ,it seems its locked.\nmaybe it might be worth it if you found a key." ,"the door is locked.\nit might be a good idea to find a key and unlock it." ,"its locked."};
-                            Random rand = new Random();
-                            int i = rand.nextInt(failResponses.length);
-                            System.out.println(failResponses[i]);
-                        }
-                    }
-                }
-                continue;
-            } if (action.split(" ")[0].equals("use")) {
-                data = action.substring(4 ,action.length());
-                item item2 = player1.getItemByName((data.split(" ")[0]).replace("_" ," "));
-                String thing = data.split(" ")[1];
-                if (item2.type().equals("key")) {
-                    boolean found = false;
-                    for (connector c : loc.getConnections()) {
-                        if (c.getData()[0].equals(thing.replace("_" ," "))) {
-                            found = true;
-                            System.out.println(c.unlock((key) item2));
-                            ((key) item2).uses -= 1;
-                            if (((key) item2).uses == 0) {
-                                player1.removeItemByName((data.split(" ")[0]).replace("_" ," "));
-                                System.out.println("snap! The key breaks in your hand!");
+            switch (action.split(" ")[0]) {
+                case "move":
+                    game = moveTo(action ,game);
+                    turnTaken = true;
+                    printData = true;
+                    break;
+                case "use":
+                    for (item i : game.player.inventory) {
+                        if (i.name.equals(action.split(" ")[1].replace("_" ," "))) {
+                            switch (i.type) {
+                                case "key":
+                                    game = useKey(action ,game);
+                                    turnTaken = true;
+                                    break;
+                                case "Hitem":
+                                    game = heal(action ,game);
+                                    turnTaken = true;
+                                    break;
+                                case "dosh":
+                                    System.out.println("There is no use for this item!");
+                                    break;
+                                default://regular item ,assume you are attacking an enemy or deactivating a trap
+                                    boolean Trap = false;
+                                    counter = 0;
+                                    for (trap t : game.player.getLocation().traps) {
+                                        if (t.getName().equals(action.split(" ")[2].replace("_" ," "))) {
+                                            Trap = true;
+                                            break;
+                                        }
+                                        counter++;
+                                    }
+                                    if (!Trap) {//its not a trap as no trap was found with that name ,therefore it must be an enemy
+                                        counter = 0;
+                                        for (enemy e : game.player.getLocation().enemies) {
+                                            if (e.name.equals(action.split(" ")[2].replace("_" ," "))) {
+                                                break;
+                                            }
+                                            counter++;
+                                        }
+                                        //handle enemies ,use counter as index
+                                        game = attack(counter ,game ,i);
+                                    } else {
+                                        //handle trap deactivation attempt ,use counter as index
+                                        game = deactivate(counter ,game);
+                                    }
                             }
                             break;
                         }
                     }
-                    if (!found) {
-                        for (trap t : loc.getTraps()) {
-                            if (t.getData()[0].equals(thing.replace("_" ," "))) {
-                                found = true;
-                                System.out.println(t.deactivate(item2));
-                                ((key) item2).uses -= 1;
-                                if (((key) item2).uses == 0) {
-                                    player1.removeItemByName((data.split(" ")[0]).replace("_" ," "));
-                                    System.out.println("snap! The key breaks in your hand!");
+                    break;
+                case "check":
+                    if (action.split(" ")[1].equals("items")) {//display the items in the room
+                        for (item i : game.nodes.get(game.getPlayerNodeIndex()).items) {
+                            System.out.println(i.name());
+                        }
+                    } else {
+                        for (item i : game.player.inventory) {
+                            if (i.name.equals(action.substring(6 ,action.length()))) {
+                                System.out.println(i.description);
+
+
+                                if (i.type == "container") {//if the item has items inside it
+                                    System.out.println("it seems to have something inside it... would you like to have a look? (y/n)");
+                                    if (scan.nextLine().equals("y")) {
+                                        counter = 0;
+                                        for (item I : ((container) i).getItems()) {
+                                            game.player.inventory.add(I);
+                                            ((container) i).removeItem(counter);
+                                            System.out.println("inside the " + i.name + " you found a " + I.name);
+                                            counter++;
+                                        }
+                                    }
                                 }
-                                break;
                             }
                         }
                     }
+                    break;
+                case "inv":
+                    System.out.println("inventory : \n--------------------\n");
+                    for (item i : game.player.inventory){
+                        System.out.println(i.name + ((i.amnt > 1) ? (" (x" + String.valueOf(i.amnt) + ")") : ""));
+                    }
+                    System.out.println("--------------------");
+                    break;
+                case "pick":
+                    game = pickUp(action ,game);
+                    turnTaken = false;
+                    break;
+                default:
+                    System.out.println("unknown command!");
+                    help();
+            }
+        }
+    }/*
+    TODO allow the player to engage in combat
+    TODO get trap activation / deactivation working
+    TODO write descriptions
+    TODO flowchart
+    TODO write cheatsheet
+    TODO submit
+    */
+    public static map moveTo (String action ,map game) {
+        String room = action.substring(8 ,action.length());
+        for (connector c : game.player.getLocation().getConnections()) {//find connector so we can move the player
+            if (c.getData()[0].equals(room)) {
+                if (c.getData()[1].equals("locked")) {
+                    String[] failResponses = {"the door doesnt budge ,it seems that its locked!\nperhaps you should unlock it first." ,"the door refuses to open.\nperhaps you should unlock it first." ,"the door wont open ,it seems its locked.\nmaybe it might be worth it if you found a key." ,"the door is locked.\nit might be a good idea to find a key and unlock it." ,"its locked."};
+                    Random rand = new Random();
+                    int i = rand.nextInt(failResponses.length);
+                    System.out.println(failResponses[i]);
                 } else {
-                    if (item2.type().equals("Hitem")) {
-                        switch (thing) {
-                            case "magic potion":
-                                player1.setHp(9999);//will end up being set to max health
-                                break;
-                            default:
-                                player1.incHp(-item2.dmg());
-                        }
-                        int counter = 0;
-                        for (item i : player1.inventory) {
-                            if (i.name().equals(item2.name())) {
-                                if (player1.inventory.get(counter).amnt() > 1) {
-                                    player1.inventory.get(counter).incAmnt(-1);
-                                } else {
-                                    player1.inventory.remove(counter);
+                    game.player.setLocation(c.destination());
+                }
+            }
+        }
+        return game;
+    }
+    public static map useKey (String action ,map game) {
+        String[] data = action.substring(4 ,action.length()).split(" ");//key ,room
+        int counter = 0;
+        int itemIndex = -1;//if this index or the other index is -1 by the end of the two loops below ,we abort the process to avoid a crash
+        int connectorIndex = -1;
+        key Key = new key(-1 ,"placeholder" ,"" ,0);
+
+        for (item i : game.player.inventory) {//first we find the index of the key referenced in the command so that we can directly modify it later
+            if (i.name.equals(data[0].replace("_" ," "))) {
+                itemIndex = counter;
+                Key = (key) i;
+                break;
+            }
+            counter++;
+        }
+        counter = 0;
+        for (connector c : game.nodes.get(game.getPlayerNodeIndex()).getConnections()) {//next we do the same thing to find the index of the connector
+            //System.out.println(game.nodes.get(game.getPlayerNodeIndex()).name + " ; " + c.getData()[0] + " " + data[1].replace("_" ," "));
+            if (c.getData()[0].equals(data[1].replace("_" ," "))) {
+                connectorIndex = counter;
+                break;
+            }
+            counter++;
+        }
+        if ((itemIndex == -1) || (connectorIndex == -1)) {
+            System.out.println(itemIndex + " " + connectorIndex);
+            return game;//abort to avoid errors
+        }
+        //now if both searches havent failed ,we can move on to attempting to unlock the door
+        //also i never expected the line below to be so long lol
+        String out = game.nodes.get(game.getPlayerNodeIndex()).getConnections().get(connectorIndex).unlock(Key);
+        System.out.println(out);
+        ((key) game.player.inventory.get(itemIndex)).uses -= 1;
+        if (((key) game.player.inventory.get(itemIndex)).uses == 0) {
+            System.out.println("Snap! The key breaks in your hand as it unlocks the door!");
+            game.player.inventory.remove(itemIndex);//if the key runs out of uses ,delete it
+        }
+        return game;
+    }
+    public static map heal (String action ,map game) {
+        int counter = 0;
+        for (item i : game.player.inventory) {
+            if (i.name.equals(action.split(" ")[1])) {
+                game.player.incHp(-i.dmg);
+                game.player.inventory.get(counter).amnt -= 1;
+                if (game.player.inventory.get(counter).amnt == 0) {
+                    game.player.inventory.remove(counter);
+                }
+                System.out.println("Your health increased by " + String.valueOf(-i.dmg) + "!");
+                return game;
+            }
+            counter++;
+        }
+        return game;
+    }
+    public static map attack (int index ,map game ,item weapon) {
+        game.nodes.get(game.getPlayerNodeIndex()).enemies.get(index).health -= weapon.dmg;
+        System.out.println("You dealt " + weapon.dmg + " to " + game.player.getLocation().enemies.get(index).name + " using " + weapon.name + "!");
+        return game;
+    }
+    public static map pickUp (String action ,map game) {
+        Scanner scan = new Scanner(System.in);
+        String item = action.substring(8 ,action.length());
+        int counter = 0;
+        for (item i : game.nodes.get(game.getPlayerNodeIndex()).items) {
+            if (i.name.equals(item)) {
+
+                if (i.type == "container") {//if its a heavy container such as a bookshelf ,chest or wardrobe for instance
+                    if (((container) i).dmg == 25) {
+                        System.out.println("It's too heavy to pick up ,however it has items inside that you may be able to pick up ,would you like to take a look? (y/n)");
+                        if (scan.nextLine().equals("y")) {
+                            System.out.println("inside there are : ");
+                            for (item i2 : ((container) i).getItems()) {
+                                System.out.println(i2.name);
+                            }
+                            System.out.print("please type what you would like to pick up ,else type none : ");
+                            String name = scan.nextLine();
+                            int counter2 = 0;
+                            for (item i2 : ((container) i).getItems()) {
+                                if (i2.name == name) {
+                                    game.player.inventory.add(i2);
+                                    ((container) i).getItems().remove(counter2);
                                 }
+                                counter2++;
                             }
                         }
                     } else {
-
+                        game.player.inventory.add(i);
+                        game.nodes.get(game.getPlayerNodeIndex()).items.remove(counter);
+                        System.out.println("You picked up " + i.name() + "!");
                     }
+                } else {
+                    game.player.inventory.add(i);
+                    game.nodes.get(game.getPlayerNodeIndex()).items.remove(counter);
+                    System.out.println("You picked up " + i.name() + "!");
                 }
+                return game;
             }
-            //actions
+            counter++;
         }
+        return game;
+    }
+    public static map deactivate (int index ,map game) {
+        return game;
+    }
+    public static void help () {
+        System.out.println("Almost every action you perform takes up a turn\n\t(unless you are checking your inventory ,checking an item in your inventory ,picking up an item ,checking the items in the room or asking for help\n\tas these five commands do not take up a turn)");
+        System.out.println("\nhere are the actions you can perform : \n\n\tuse <item> <thing>         : uses an item on a thing ,for instance using a key on a lock or a weapon on an enemy (if its a health item ,you dont have to specify the <thing>)\n\t\t\t                    (for items with a space in their name ,replace the spaces with an _ (\"test item\" -> \"test_item\"))\n\tmove to <room or junction> : moves the player around the map (obviously you cannot move through locked doors though)\n\tpick up <item>             : picks up an item from the room\n\tcheck <item>               : analyses an item in your inventory\n\thelp                       : asks for this menu and a help page\n\tinv                        : checks the contents of your inventory\n\tcheck items               : displays the items in the room");
+        System.out.println("\n\nuseful info : if an item contains other items (like a bookshelf) ,pick it up ,if its too heavy the game will still let you take items from inside it");
     }
 }
