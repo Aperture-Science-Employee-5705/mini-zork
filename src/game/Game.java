@@ -134,27 +134,28 @@ public class Game {
 
         //now its time to populate the map with monsters
 
-        room1.addEnemy(new enemy("Zombie" ,"" ,1 ,10 ,""));
-        room2.addEnemy(new enemy("Skeleton" ,"" ,3 ,7 ,""));
-        room5.addEnemy(new enemy("Orc" ,"" ,4 ,11 ,""));
-        junction3.addEnemy(new enemy("Gruu" ,"" ,10 ,15 ,""));
-        library.addEnemy(new enemy("Phantom librarian" ,"" ,15 ,16 ,""));
+        room1.addEnemy(new enemy("Zombie" ,new String[] {"" ,"the zombie attacks"}  ,1 ,10 ,""));
+        room2.addEnemy(new enemy("Skeleton" ,new String[] {"" ,"the skeleton attacks"}   ,3 ,7 ,""));
+        room5.addEnemy(new enemy("Orc" ,new String[] {"" ,"the orc atacks "}  ,4 ,11 ,""));
+        junction3.addEnemy(new enemy("Gruu" ,new String[] {"" ,"the gruu attacks"} ,10 ,15 ,""));
+        library.addEnemy(new enemy("Phantom librarian" ,new String[] {"" ,"she attacks"} ,15 ,16 ,""));
 
-        room4.addEnemy(new enemy("Soldat" ,"" ,20 ,30 ,"metal part"));
+        room4.addEnemy(new enemy("Soldat" ,new String[] {"" ,"the soldat attacks"} ,20 ,30 ,"metal part"));
         room4.giveEnemyItem("Soldat" ,new key(8 , "trap key","An old ,grey ,chipped metal key. It is a little heavy and has the word \"TRAP\" engraved on it." ,1));
+        room4.giveEnemyItem("soldat" ,new item("item" ,"broken drill" ,"" ,30 ,1));
         //an important enemy ^
 
-        room7.addEnemy(new enemy("Moulded" ,"" ,11 ,25 ,""));
-        room8.addEnemy(new enemy("Lycan" ,"" ,12 ,27 ,""));
-        treasureRoom.addEnemy(new enemy("The grey guardian" ,"" ,18 ,42 ,""));
+        room7.addEnemy(new enemy("Moulded" ,new String[] {"" ,"the moulded attacks"} ,11 ,25 ,""));
+        room8.addEnemy(new enemy("Lycan" ,new String[] {"" ,"the lycan attacks"} ,12 ,27 ,""));
+        treasureRoom.addEnemy(new enemy("The grey guardian" ,new String[] {"" ,"the grey gaurdian attacks"} ,18 ,42 ,""));
 
-        battleHall.addEnemy(new enemy("Visrex the Indestructible" ,"" ,25 ,75 ,"Your soul"));
+        battleHall.addEnemy(new enemy("Visrex the Indestructible" ,new String[] {"" ,"visrex attacks"} ,25 ,75 ,"Your soul"));
 
 
 
         //now to add a few traps
         junction2.addTrap(new trap("moving sawblade trap" ,new String[] {"As you walk into the corridoor ,you nearly trip over something. Suddenly a loud whirring nois starts up and you hear multiple clicks as all the doors attached to the corridoor lock.\nIn the dim light you can just about make out several spinning ,razor-sharp sawblades pop out of the wall and begin racing down the corridoor on a loop that will eventually catch you!\nFrantically looking around in terror ,you spot a hole in the wall ,behind which an active mechanism can be seen." ,"The sawblades make it to the other end of the corridoor and loop around ,now coming in your direction." ,"Its too late ,you barely turn all the way around before the blades catch up with and kill you." ,"You ram the metal part into the mechanism as hard as you can. Suddenly ,the gears make a loud crunching sound and the blades come to an abrupt stop."} ,"enter_room" ,30 ,2 ,new item("item" ,"metal part" ,"a shiny metal part from something mechanical" ,6 ,1) ,false));
-        jackpotRoom.addTrap(new trap("poison gas trap" ,new String[] {""} ,"took_too_much;dosh" ,-1 ,0 ,new item("placeholder" ,"" ,"" ,0 ,0) ,true));//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
+        jackpotRoom.addTrap(new trap("poison gas trap" ,new String[] {""} ,"remove;80.0" ,-1 ,0 ,new item("placeholder" ,"" ,"" ,0 ,0) ,true));//activation method : take too much treasure ,trap type : poison gas & room lock (lethal) ,disarm method : none
         //^ if you are too greedy
         trapRoom.addTrap(new trap("crushing ceiling trap" ,new String[] {""} ,"enter_room" ,100 ,3 ,new key(8 , "trap key","An old ,grey ,chipped metal key. It is a little heavy and has the word \"TRAP\" engraved on it." ,1) ,true));//activation method : enter room ,trap type : crushing ceiling ,disarm method : trap key (obtainable by giving the soldat the metal part)
 
@@ -254,14 +255,6 @@ public class Game {
         game.addNode(junction3);
         game.addNode(junction4);
 
-
-
-
-
-
-
-
-
         //now that we have constructed the dungeon and everything in it ,its time to start the gameplay! (finally)
 
         Scanner scan = new Scanner(System.in);
@@ -276,6 +269,8 @@ public class Game {
         System.out.println();
 
         player1.addToInventory(new key(0 ,"green key" ,"A small ,chipped cast iron key with a green tag attached" ,3));
+        player1.addToInventory(new item("item" ,"stick" ,"a large stick" ,3 ,1));
+
 
 
         String action;
@@ -283,24 +278,25 @@ public class Game {
         boolean printData = true;
         boolean turnTaken = false;
         boolean done = false;
+        boolean Tlock = false;
+        System.out.println("current location : [" + game.player.getLocation().name + "]\n" + game.player.getLocation().Description());
         while (!done) {//game loop
-            turnTaken = false;
-
-            if (printData) {
-                System.out.println("current location : [" + game.player.getLocation().name + "]\n" + game.player.getLocation().Description());
-                printData = false;
-            }
 
             System.out.print("what will you do " + game.player.name() + "? : ");
             action = scan.nextLine();
             switch (action.split(" ")[0]) {
                 case "move":
-                    game = moveTo(action ,game);
+                    if (!Tlock) {//if the doors are locked by a trap ,do not allow the player to leave
+                        game = moveTo(action, game);
+                        if (game.player.getLocation().name == "The final room in the game and the exit to the dungeon.") {
+                            done = true;
+                        }
+                    }
                     turnTaken = true;
                     printData = true;
                     break;
                 case "use":
-                    for (item i : game.player.inventory) {
+                    for (item i : game.player.getInventory()) {
                         if (i.name.equals(action.split(" ")[1].replace("_" ," "))) {
                             switch (i.type) {
                                 case "key":
@@ -332,11 +328,16 @@ public class Game {
                                             }
                                             counter++;
                                         }
-                                        //handle enemies ,use counter as index
-                                        game = attack(counter ,game ,i);
+                                        game = attack(action ,game ,i);
                                     } else {
                                         //handle trap deactivation attempt ,use counter as index
-                                        game = deactivate(counter ,game);
+                                        item i3 = new item("placeholder" ,"" ,"" ,0 ,0);
+                                        for (item i2 : game.player.getInventory()) {
+                                            if (i2.name.equals(action.split(" ")[1])) {
+                                                i3 = i2;
+                                            }
+                                        }
+                                        game = deactivate(counter ,i3 ,game);
                                     }
                             }
                             break;
@@ -345,11 +346,12 @@ public class Game {
                     break;
                 case "check":
                     if (action.split(" ")[1].equals("items")) {//display the items in the room
+                        //game.player.removeDuplicates();
                         for (item i : game.nodes.get(game.getPlayerNodeIndex()).items) {
                             System.out.println(i.name());
                         }
                     } else {
-                        for (item i : game.player.inventory) {
+                        for (item i : game.player.getInventory()) {
                             if (i.name.equals(action.substring(6 ,action.length()))) {
                                 System.out.println(i.description);
 
@@ -359,7 +361,7 @@ public class Game {
                                     if (scan.nextLine().equals("y")) {
                                         counter = 0;
                                         for (item I : ((container) i).getItems()) {
-                                            game.player.inventory.add(I);
+                                            game.player.getInventory().add(I);
                                             ((container) i).removeItem(counter);
                                             System.out.println("inside the " + i.name + " you found a " + I.name);
                                             counter++;
@@ -372,7 +374,7 @@ public class Game {
                     break;
                 case "inv":
                     System.out.println("inventory : \n--------------------\n");
-                    for (item i : game.player.inventory){
+                    for (item i : game.player.getInventory()){
                         System.out.println(i.name + ((i.amnt > 1) ? (" (x" + String.valueOf(i.amnt) + ")") : ""));
                     }
                     System.out.println("--------------------");
@@ -381,13 +383,71 @@ public class Game {
                     game = pickUp(action ,game);
                     turnTaken = false;
                     break;
+                case "help":
+                    help();
                 default:
                     System.out.println("unknown command!");
-                    help();
+            }
+            if (printData) {
+                System.out.println("current location : [" + game.player.getLocation().name + "]\n" + game.player.getLocation().Description());
+                printData = false;
+            }
+            if (turnTaken) {//enemies can attack and traps can progress
+                counter = 0;
+                for (enemy e : game.nodes.get(game.getPlayerNodeIndex()).enemies) {
+                    if (e.health > 0) {
+                        game.player.incHp(-e.damage);
+                        System.out.println(e.descriptions[1]);
+                    } else {
+                        for (item i : e.dropItems()) {
+                            game.player.addToInventory(i);
+                        }
+                        game.nodes.get(game.getPlayerNodeIndex()).enemies.remove(counter);//if enemy is dead ,drop items and delete
+                        System.out.println("you have killed the " + e.name);
+                    }
+                    counter++;
+                }
+                counter = 0;
+                for (trap t : game.nodes.get(game.getPlayerNodeIndex()).traps) {
+                    switch (t.active) {
+                        case 0://trap not yet triggered
+                            boolean trigger = false;
+                            switch ((t.getActivationM() + ";0").split(";")[0]) {
+                                case "enter_room":
+                                    trigger = true;
+                                    break;
+                                case "remove":
+                                    float pct = Float.valueOf(t.getActivationM().split(";")[1]);
+                                    trigger = (game.nodes.get(game.getPlayerNodeIndex()).removedAmount() > pct);//if too many items were removed ,the trap triggers
+                                    break;
+                                default:
+                                    trigger = false;
+                            }
+                            if (trigger) {
+                                game.nodes.get(game.getPlayerNodeIndex()).traps.get(counter).active = 1;//trigger the trap
+                                Tlock = t.lockD;
+                            }
+                            System.out.println(t.getDescriptions()[0]);
+                            break;
+                        case 1://trap is active
+                            game.nodes.get(game.getPlayerNodeIndex()).traps.get(counter).turns -= 1;
+                            if (t.turns == 0) {
+                                game.player.incHp(-t.getDamage());
+                            }
+                            System.out.println(t.getDescriptions()[1]);
+                        case 2:
+                            System.out.println(t.getDescriptions()[2]);
+                            break;
+                        default:
+                            ;
+                    }
+                    counter++;
+                }
             }
         }
+        System.out.println("well done you won!");
     }/*
-    TODO allow the player to engage in combat
+    TODO fix enemy combat
     TODO get trap activation / deactivation working
     TODO write descriptions
     TODO flowchart
@@ -404,6 +464,7 @@ public class Game {
                     int i = rand.nextInt(failResponses.length);
                     System.out.println(failResponses[i]);
                 } else {
+                    System.out.println("you move " + c.getData()[2] + " to " + c.destination().name);
                     game.player.setLocation(c.destination());
                 }
             }
@@ -417,7 +478,7 @@ public class Game {
         int connectorIndex = -1;
         key Key = new key(-1 ,"placeholder" ,"" ,0);
 
-        for (item i : game.player.inventory) {//first we find the index of the key referenced in the command so that we can directly modify it later
+        for (item i : game.player.getInventory()) {//first we find the index of the key referenced in the command so that we can directly modify it later
             if (i.name.equals(data[0].replace("_" ," "))) {
                 itemIndex = counter;
                 Key = (key) i;
@@ -442,21 +503,21 @@ public class Game {
         //also i never expected the line below to be so long lol
         String out = game.nodes.get(game.getPlayerNodeIndex()).getConnections().get(connectorIndex).unlock(Key);
         System.out.println(out);
-        ((key) game.player.inventory.get(itemIndex)).uses -= 1;
-        if (((key) game.player.inventory.get(itemIndex)).uses == 0) {
+        ((key) game.player.getInventory().get(itemIndex)).uses -= 1;
+        if (((key) game.player.getInventory().get(itemIndex)).uses == 0) {
             System.out.println("Snap! The key breaks in your hand as it unlocks the door!");
-            game.player.inventory.remove(itemIndex);//if the key runs out of uses ,delete it
+            game.player.removeFromInventory(itemIndex);//if the key runs out of uses ,delete it
         }
         return game;
     }
     public static map heal (String action ,map game) {
         int counter = 0;
-        for (item i : game.player.inventory) {
+        for (item i : game.player.getInventory()) {
             if (i.name.equals(action.split(" ")[1])) {
                 game.player.incHp(-i.dmg);
-                game.player.inventory.get(counter).amnt -= 1;
-                if (game.player.inventory.get(counter).amnt == 0) {
-                    game.player.inventory.remove(counter);
+                game.player.getInventory().get(counter).amnt -= 1;
+                if (game.player.getInventory().get(counter).amnt == 0) {
+                    game.player.removeFromInventory(counter);
                 }
                 System.out.println("Your health increased by " + String.valueOf(-i.dmg) + "!");
                 return game;
@@ -465,9 +526,16 @@ public class Game {
         }
         return game;
     }
-    public static map attack (int index ,map game ,item weapon) {
-        game.nodes.get(game.getPlayerNodeIndex()).enemies.get(index).health -= weapon.dmg;
-        System.out.println("You dealt " + weapon.dmg + " to " + game.player.getLocation().enemies.get(index).name + " using " + weapon.name + "!");
+    public static map attack (String action ,map game ,item weapon) {
+        int counter = 0;
+        for (enemy e : game.player.getLocation().enemies) {
+            if (e.name.equals(action.split(" ")[2].replace("_" ," "))) {
+                game.nodes.get(game.getPlayerNodeIndex()).enemies.get(counter).health -= weapon.dmg;
+                System.out.println("You dealt " + weapon.dmg + " to " + game.player.getLocation().enemies.get(counter).name + " using " + weapon.name + "!");
+                break;
+            }
+            counter++;
+        }
         return game;
     }
     public static map pickUp (String action ,map game) {
@@ -490,19 +558,19 @@ public class Game {
                             int counter2 = 0;
                             for (item i2 : ((container) i).getItems()) {
                                 if (i2.name == name) {
-                                    game.player.inventory.add(i2);
+                                    game.player.addToInventory(i2);
                                     ((container) i).getItems().remove(counter2);
                                 }
                                 counter2++;
                             }
                         }
                     } else {
-                        game.player.inventory.add(i);
+                        game.player.addToInventory(i);
                         game.nodes.get(game.getPlayerNodeIndex()).items.remove(counter);
                         System.out.println("You picked up " + i.name() + "!");
                     }
                 } else {
-                    game.player.inventory.add(i);
+                    game.player.addToInventory(i);
                     game.nodes.get(game.getPlayerNodeIndex()).items.remove(counter);
                     System.out.println("You picked up " + i.name() + "!");
                 }
@@ -512,7 +580,10 @@ public class Game {
         }
         return game;
     }
-    public static map deactivate (int index ,map game) {
+    public static map deactivate (int index ,item i ,map game) {
+        if (i.name.equals(i.name)) {
+            game.nodes.get(game.getPlayerNodeIndex()).traps.get(index).active = 2;
+        }
         return game;
     }
     public static void help () {

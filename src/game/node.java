@@ -8,6 +8,7 @@ public class node {
     public LinkedList<connector> connections = new LinkedList<connector>();
     public LinkedList<enemy> enemies;
     public LinkedList<item> items;
+    public LinkedList<item> originalItems;
     public LinkedList<trap> traps;
     public String description;
     public String[] metadata;
@@ -18,6 +19,7 @@ public class node {
     public node(int id ,String name ,String type ,String description ,String[] metadata) {
         this.enemies = new LinkedList<enemy>();
         this.items = new LinkedList<item>();
+        this.originalItems = new LinkedList<item>();
         this.traps = new LinkedList<trap>();
         this.description = description;
         this.metadata = metadata;
@@ -50,7 +52,19 @@ public class node {
     }
     public void addItem(item item) {
         this.items.add(item);
+        this.originalItems.add(item);
         //this.combineDuplicates();
+    }
+    public float removedAmount() {
+        int Ctalley = 0;
+        int Otalley = 0;
+        for (item i : this.items) {
+            Ctalley += i.amnt;
+        }
+        for (item i : this.originalItems) {
+            Otalley += i.amnt;
+        }
+        return (Ctalley/Otalley)*100;
     }
     public void addTrap(trap trap) {
         this.traps.add(trap);
@@ -62,7 +76,7 @@ public class node {
         String enemydat = "enemies in the room : \n";
         if (this.enemies.size() > 0) {
             for (enemy e : this.enemies) {
-                enemydat += e.getName() + "\n" + e.Description() + "\n";
+                enemydat += e.getName() + "\n" + e.Description()[0] + "\n";
             }
         } else {
             enemydat = "there are no enemies in the room!";

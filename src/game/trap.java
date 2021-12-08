@@ -4,10 +4,11 @@ public class trap {
     private String name;
     private String[] descriptions;//4 descriptions : upon activation (1st chance) ,during active (2nd chance --> nth chance with n being the number of turns allowed to deactivate it) ,upon death ,upon disarm
     private int damage;
-    private int turns;
+    public int turns;
     private String activationM;
     private item deactivationM;
-    private boolean lockD;
+    public boolean lockD;
+    public int active;
     
     public trap(String name ,String[] descriptions ,String activation ,int dmg ,int turns ,item deactivation ,boolean lockD) {
         this.name = name;
@@ -17,6 +18,7 @@ public class trap {
         this.turns = turns;
         this.deactivationM = deactivation;
         this.lockD = lockD;
+        this.active = 0;//0 - not yet activated ,1 - active ,2 - deactivated
     }
     public String deactivate(item i) {
         if (i.name.equals(this.deactivationM.name)) {

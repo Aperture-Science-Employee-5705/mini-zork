@@ -7,7 +7,7 @@ public class player {
     private int hp;
     private int maxHealth;
     private int baseDmg;
-    public LinkedList<item> inventory = new LinkedList<item>();
+    private LinkedList<item> inventory = new LinkedList<item>();
     private node location;
 
     public player(String name ,int maxhp ,int baseDmg ,node location){
@@ -17,8 +17,39 @@ public class player {
         this.baseDmg = baseDmg;
         this.location = location;
     }
+    /*public void removeDuplicates() {
+        int counter = 0;
+        int counter2;
+        System.out.println("removing dupes...");
+        for (item i : this.inventory) {
+            System.out.print(i.name + " ");
+            counter2 = 0;
+            for (item i2 : this.inventory) {
+                System.out.println(i2.name);
+                if (counter2 == counter) {
+                    counter++;
+                    continue;
+                }
+                if (i2.name.equals(i.name)) {
+                    System.out.println(counter + " " + this.inventory.size() + " " + counter2);
+                    this.inventory.get(counter).amnt += i2.amnt;
+                    this.inventory.remove(counter2);
+                    counter2 -= 1;
+                }
+                counter++;
+            }
+            counter++;
+        }
+    }*/
+    public LinkedList<item> getInventory() {
+        return this.inventory;
+    }
     public void addToInventory(item item) {
+        //this.removeDuplicates();
         this.inventory.add(item);
+    }
+    public void removeFromInventory(int index) {
+        this.inventory.remove(index);
     }
     public node getLocation() {
         return this.location;
@@ -30,6 +61,7 @@ public class player {
         return this.name;
     }
     public item getItemByName(String name) {
+        //this.removeDuplicates();
         item out = new item("placeholder" ,"" ,"" ,0 ,0);
         for (item i : this.inventory) {
             if (i.name().equals(name)) {
@@ -40,6 +72,7 @@ public class player {
         return out;
     }
     public void removeItemByName(String name) {
+        //this.removeDuplicates();
         int counter = 0;
         for (item i : this.inventory) {
             if (i.name().equals(name)) {
