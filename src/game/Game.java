@@ -560,6 +560,7 @@ public class Game {
                                 if (i2.name == name) {
                                     game.player.addToInventory(i2);
                                     ((container) i).getItems().remove(counter2);
+                                    System.out.println("You picked up " + i2.name() + "!");
                                 }
                                 counter2++;
                             }
